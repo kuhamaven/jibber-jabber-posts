@@ -1,32 +1,28 @@
 version: '3'
 
 services:
-  api:
-    container_name: "posts-api"
-    build:
-      context: .
-      dockerfile: Dockerfile.multi
-    ports:
-      - 8000:8080
-    environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: posts-db
-      DB_HOST: postgres_db
-      DB_PORT: 5432
-
   db:
-    container_name: postgres_db
+    container_name: postsDB
     image: postgres:12
+    restart: always
+    env_file:
+      - .env.production
     ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: sa
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: posts-db
+      - 5433:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+#
+#  api:
+#    container_name: api-posts
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.dev
+#    ports:
+#      - 8000:8080
+#    env_file:
+#      - .env.production
+#    depends_on:
+#      - db
 
 volumes:
   pgdata:
-    external: true
