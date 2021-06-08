@@ -28,10 +28,29 @@ public class PostsController {
         return new ResponseEntity(arrayList,HttpStatus.OK);
     }
 
-
     @PostMapping()
     public ResponseEntity createPost(@RequestBody PostsModel postsModel){
         return new ResponseEntity(this.postsService.savePost(postsModel),HttpStatus.OK);
+    }
+
+    @GetMapping("/liked/{id}")
+    public ResponseEntity getLikedPosts(@PathVariable String id){
+        return new ResponseEntity(this.postsService.getAllLiked(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/author/{id}")
+    public ResponseEntity getAuthorPosts(@PathVariable String id){
+        return new ResponseEntity(this.postsService.getAuthorPosts(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deletePosts(@PathVariable String id){
+        return new ResponseEntity(this.postsService.deletePost(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/like")
+    public ResponseEntity likePost(@RequestBody PostLike postLike){
+        return new ResponseEntity(this.postsService.like(postLike),HttpStatus.OK);
     }
 
 }

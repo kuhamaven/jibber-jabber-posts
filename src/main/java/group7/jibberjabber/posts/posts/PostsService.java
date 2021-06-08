@@ -1,8 +1,9 @@
 package group7.jibberjabber.posts.posts;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostsService {
@@ -16,11 +17,11 @@ public class PostsService {
         return this.postsRepository.findById(id).orElseThrow(()->new RuntimeException("POST NOT FOUND"));
     }
 
-    public Iterable<PostsModel> findAll(){
+    public List<PostsModel> findAll(){
         return this.postsRepository.findAll();
     }
 
-    public Iterable<PostsModel> findAllByAuthor(String author){
+    public List<PostsModel> findAllByAuthor(String author){
         return this.postsRepository.findAllByAuthor(author);
     }
 
@@ -29,4 +30,27 @@ public class PostsService {
     }
 
 
+    public List<PostsModel> getAllLiked(String id) {
+        return postsRepository.findAllByLikedBy(id);
+    }
+
+    public List<PostsModel> getAuthorPosts(String id) {
+        return postsRepository.findAllByAuthorId(id);
+    }
+
+    public String deletePost(String id) {
+        Optional<PostsModel> post = postsRepository.findById(id);
+        if (post.isEmpty()) return null;
+        postsRepository.delete(post.get());
+        return id;
+    }
+
+    public PostsModel like(PostLike postLike) {
+        Optional<PostsModel> post = postsRepository.findById(postLike.getPostId());
+        if(post.isEmpty()) return null;
+        List<String> likedBy = post.get().getLikedBy();
+        likedBy.add(postLike.getUserId());
+        post.get().setLikedBy(likedBy);
+        return postsRepository.save(post.get());
+    }
 }
