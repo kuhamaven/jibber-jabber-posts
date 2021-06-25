@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -22,35 +22,37 @@ public class PostsController {
     }
 
     @GetMapping()
-    public ResponseEntity getPostsModel(){
-        ArrayList<PostsModel> arrayList=new ArrayList<>();
-        this.postsService.findAll().forEach(arrayList::add);
-        return new ResponseEntity(arrayList,HttpStatus.OK);
+    public List<PostDto> getPostsModel(){
+        return this.postsService.findAll();
     }
 
     @PostMapping()
-    public ResponseEntity createPost(@RequestBody PostsModel postsModel){
-        return new ResponseEntity(this.postsService.savePost(postsModel),HttpStatus.OK);
+    public PostsModel createPost(@RequestBody PostsModel postsModel){
+        return this.postsService.savePost(postsModel);
     }
 
     @GetMapping("/liked/{id}")
-    public ResponseEntity getLikedPosts(@PathVariable String id){
-        return new ResponseEntity(this.postsService.getAllLiked(id),HttpStatus.OK);
+    public List<PostDto> getLikedPosts(@PathVariable String id){
+        return this.postsService.getAllLiked(id);
     }
 
     @GetMapping("/author/{id}")
-    public ResponseEntity getAuthorPosts(@PathVariable String id){
-        return new ResponseEntity(this.postsService.getAuthorPosts(id), HttpStatus.OK);
+    public List<PostDto> getAuthorPosts(@PathVariable String id){
+        return this.postsService.getAuthorPosts(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity deletePosts(@PathVariable String id){
-        return new ResponseEntity(this.postsService.deletePost(id), HttpStatus.OK);
+    public String deletePosts(@PathVariable String id){
+        return this.postsService.deletePost(id);
     }
 
     @PutMapping("/like")
-    public ResponseEntity likePost(@RequestBody PostLike postLike){
-        return new ResponseEntity(this.postsService.like(postLike),HttpStatus.OK);
+    public PostDto likePost(@RequestBody PostLike postLike){
+        return this.postsService.like(postLike);
     }
 
+    @GetMapping("/timeline")
+    public List<PostDto> timeline(@RequestBody FollowedDto followedDto){
+        return this.postsService.timeline(followedDto);
+    }
 }
