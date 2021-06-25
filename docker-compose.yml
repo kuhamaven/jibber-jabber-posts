@@ -14,12 +14,12 @@ services:
 
   api:
     container_name: api-posts
-#    image: jibber-jabber-posts_api #Queda buildeada del docker-compose build, eventualmente pusheada en un repo publico.
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
+    image: jibber-jabber-posts_api #Queda buildeada del docker-compose build, eventualmente pusheada en un repo publico.
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.dev
     ports:
-      - 8001:8081
+      - 8001:8080
     env_file:
       - .env.production
     depends_on:
