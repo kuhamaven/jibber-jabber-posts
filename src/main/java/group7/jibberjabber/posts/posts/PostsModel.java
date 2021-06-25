@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @Table
 @Data
-public class PostsModel {
+public class PostsModel{
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
