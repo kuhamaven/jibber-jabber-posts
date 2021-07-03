@@ -2,8 +2,12 @@ package group7.jibberjabber.posts.posts;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostsService {
@@ -17,8 +21,9 @@ public class PostsService {
         return this.postsRepository.findById(id).orElseThrow(()->new RuntimeException("POST NOT FOUND"));
     }
 
-    public List<PostsModel> findAll(){
-        return this.postsRepository.findAll();
+    public List<PostDto> findAll(){
+        List<PostDto> list = postsRepository.findAll().stream().map(PostDto::toDto).collect(Collectors.toList());
+        return list;
     }
 
     public List<PostsModel> findAllByAuthor(String author){
@@ -30,12 +35,14 @@ public class PostsService {
     }
 
 
-    public List<PostsModel> getAllLiked(String id) {
-        return postsRepository.findAllByLikedBy(id);
+    public List<PostDto> getAllLiked(String id) {
+        List<PostDto> list = postsRepository.findAllByLikedBy(id).stream().map(PostDto::toDto).collect(Collectors.toList());
+        return list;
     }
 
-    public List<PostsModel> getAuthorPosts(String id) {
-        return postsRepository.findAllByAuthorId(id);
+    public List<PostDto> getAuthorPosts(String id) {
+        List<PostDto> list = postsRepository.findAllByAuthorId(id).stream().map(PostDto::toDto).collect(Collectors.toList());
+        return list;
     }
 
     public String deletePost(String id) {
@@ -45,12 +52,21 @@ public class PostsService {
         return id;
     }
 
-    public PostsModel like(PostLike postLike) {
+    public PostDto like(PostLike postLike) {
         Optional<PostsModel> post = postsRepository.findById(postLike.getPostId());
         if(post.isEmpty()) return null;
         List<String> likedBy = post.get().getLikedBy();
         likedBy.add(postLike.getUserId());
         post.get().setLikedBy(likedBy);
-        return postsRepository.save(post.get());
+        return PostDto.toDto(postsRepository.save(post.get()));
+    }
+
+    public List<PostDto> timeline(FollowedDto followedDto) {
+        List<PostsModel> timeline = new ArrayList<>();
+        for (int i = 0; i <followedDto.getFollowed().size() ; i++) {
+            timeline.addAll(postsRepository.findAllByAuthorId(followedDto.getFollowed().get(i)));
+        }
+        timeline.sort(Comparator.comparing(PostsModel::getTimeRecorded).reversed());
+        return timeline.stream().map(PostDto::toDto).collect(Collectors.toList());
     }
 }
