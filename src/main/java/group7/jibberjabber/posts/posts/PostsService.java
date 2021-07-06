@@ -37,11 +37,13 @@ public class PostsService {
 
     public List<PostDto> getAllLiked(String id) {
         List<PostDto> list = postsRepository.findAllByLikedBy(id).stream().map(PostDto::toDto).collect(Collectors.toList());
+        list.sort(Comparator.comparing(PostDto::getTimeRecorded).reversed());
         return list;
     }
 
     public List<PostDto> getAuthorPosts(String id) {
         List<PostDto> list = postsRepository.findAllByAuthorId(id).stream().map(PostDto::toDto).collect(Collectors.toList());
+        list.sort(Comparator.comparing(PostDto::getTimeRecorded).reversed());
         return list;
     }
 
@@ -56,7 +58,9 @@ public class PostsService {
         Optional<PostsModel> post = postsRepository.findById(postLike.getPostId());
         if(post.isEmpty()) return null;
         List<String> likedBy = post.get().getLikedBy();
-        likedBy.add(postLike.getUserId());
+        if (likedBy.contains(postLike.getUserId())) {
+            likedBy.remove(postLike.getUserId());
+        } else likedBy.add(postLike.getUserId());
         post.get().setLikedBy(likedBy);
         return PostDto.toDto(postsRepository.save(post.get()));
     }
