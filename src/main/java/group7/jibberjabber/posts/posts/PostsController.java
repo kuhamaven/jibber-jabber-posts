@@ -51,7 +51,7 @@ public class PostsController {
         return this.postsService.like(postLike);
     }
 
-    @GetMapping("/timeline")
+    @PostMapping("/timeline")
     public List<PostDto> timeline(@RequestBody FollowedDto followedDto){
         return this.postsService.timeline(followedDto);
     }
