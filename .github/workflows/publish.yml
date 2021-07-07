@@ -1,23 +1,23 @@
-#name: publish
-#
-#on: [push]
-#
-#jobs:
-#  publish-image:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#    - uses: actions/checkout@v2
-#
-#    - name: Login to GitHub Container Registry
-#      uses: docker/login-action@v1
-#      with:
-#        registry: ghcr.io
-#        username: ${{ github.actor }}
-#        password: ${{ secrets.GITHUB_TOKEN }}
-#
-#    - name: Build the Docker image
-#      run: |
-#        docker build . -f Dockerfile.dev --tag ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
-#        docker run ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
-#        docker push ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
+name: publish
+
+on: [push]
+
+jobs:
+  publish-image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build the Docker image
+      run: |
+        docker build . -f Dockerfile --tag ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
+        docker run ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
+        docker push ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
