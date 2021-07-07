@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  db:
+  jibber-jabber-posts-db:
     container_name: postsDB
     image: postgres:12
     restart: always
@@ -12,7 +12,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  api:
+  jibber-jabber-posts-api:
     container_name: api-posts
 #    image: jibber-jabber-posts_api #Queda buildeada del docker-compose build, eventualmente pusheada en un repo publico.
     build:
@@ -23,7 +23,7 @@ services:
     env_file:
       - .env.production
     depends_on:
-      - db
+      - jibber-jabber-posts-db
 
 volumes:
   pgdata:
