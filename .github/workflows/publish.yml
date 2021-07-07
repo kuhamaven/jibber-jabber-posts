@@ -19,5 +19,4 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . -f Dockerfile --tag ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
-        docker run ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
         docker push ghcr.io/kuhamaven/jibber-jabber-posts_api:latest
