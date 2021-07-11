@@ -23,6 +23,14 @@ jobs:
         docker build . -f Dockerfile --tag ghcr.io/kuhamaven/jibber-jabber-posts_api-dev:latest
         docker push ghcr.io/kuhamaven/jibber-jabber-posts_api-dev:latest
 
-    - name: Connect via SSH and deploy
-      run: |
-        ssh -i ${{ secrets.VM_KEY_DEV}} ${{ secrets.VM_USER_DEV}}@${{ secrets.VM_IP_DEV}} 'sudo ~/jj/jibber-jabber-infrastructure/start-jibber-jabber-dev.sh'
+#    - name: Connect via SSH and deploy
+#      run: |
+#        ssh -i ${{ secrets.VM_KEY_DEV}} ${{ secrets.VM_USER_DEV}}@${{ secrets.VM_IP_DEV}} 'sudo ~/jj/jibber-jabber-infrastructure/start-jibber-jabber-dev.sh'
+
+    - name: Deploy
+      uses: fifsky/ssh-action@master
+      with:
+        command: ~/jj/jibber-jabber-infrastructure/start-jibber-jabber-dev.sh
+        host: ${{ secrets.VM_IP_DEV }}
+        user: ${{ secrets.VM_USER_DEV }}
+        key: ${{ secrets.VM_KEY_DEV }}
