@@ -25,4 +25,4 @@ jobs:
 
     - name: Connect via SSH and deploy
       run: |
-        ssh -i ${ secrets.VM_KEY_DEV} ${ secrets.VM_USER_DEV}@${{ secrets.VM_IP_DEV}} 'sudo ~/jj/jibber-jabber-infrastructure/start-jibber-jabber-dev.sh'
+        ssh -i ${{ secrets.VM_KEY_DEV}} ${{ secrets.VM_USER_DEV}}@${{ secrets.VM_IP_DEV}} 'sudo ~/jj/jibber-jabber-infrastructure/start-jibber-jabber-dev.sh'
